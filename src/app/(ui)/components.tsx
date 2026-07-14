@@ -253,6 +253,36 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
   );
 }
 
+export function BrandLogo({
+  showWordmark = true,
+  className = "",
+  markClassName = "h-10 w-auto",
+  wordmarkClassName = "text-lg md:text-xl font-semibold tracking-tight",
+}: {
+  showWordmark?: boolean;
+  className?: string;
+  markClassName?: string;
+  wordmarkClassName?: string;
+}) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+      <Image
+        src="/assets/hoe-logo-mark.png"
+        alt="House of Electronics logo"
+        width={356}
+        height={394}
+        className={markClassName}
+        priority
+      />
+      {showWordmark ? (
+        <span className={`${wordmarkClassName} text-[--color-foreground] leading-none`}>
+          House of Electronics
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
 // Exact FooterLogo extracted from homepage
 export function FooterLogo() {
   const [isDark, setIsDark] = useState(false);
