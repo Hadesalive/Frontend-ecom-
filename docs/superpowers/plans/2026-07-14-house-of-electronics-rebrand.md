@@ -513,69 +513,23 @@ git commit -m "feat: cart provider with localStorage persistence, mounted in lay
 
 ---
 
-### Task 5: Logo asset processing + BrandLogo component
+### Task 5: BrandLogo component (logo asset already processed)
 
 **Files:**
-- Create: `public/assets/hoe-logo-mark.png` (generated)
-- Create (temporary, then delete): `scripts/process-logo.py`
+- Already created (committed): `public/assets/hoe-logo-mark.png` — the transparent mark
 - Modify: `src/app/(ui)/components.tsx` (add `BrandLogo`)
 
 **Interfaces:**
 - Produces: `BrandLogo({ className?, showWordmark?, markClassName?, wordmarkClassName? }): JSX.Element` exported from `components.tsx`.
 
-- [ ] **Step 1: Copy the source logo into the repo**
+> **Note:** The logo asset is DONE. `public/assets/hoe-logo-mark.png` (356×394, transparent) was already generated and committed (commit `73daaf6`) from the user's black-background source (`2.jpeg`) by cropping to `(360, 336, 716, 730)` to drop the baked-in "Type A / House of Electronics (SL) LTD." text, then keying out the pure-black background (alpha ∝ pixel brightness × 1.9 gain, colors kept as observed). Verified to render cleanly on both white and black. Do NOT regenerate it. This task now only adds the `BrandLogo` component.
 
-Run:
+- [ ] **Step 1: Confirm the asset exists**
 
-```bash
-mkdir -p scripts && cp "/Users/ahmadsmacbookpro/.claude/image-cache/9da4174b-bdb4-4238-9331-6a1c5a515714/1.png" scripts/logo-source.png
-```
+Run: `ls -l public/assets/hoe-logo-mark.png`
+Expected: file exists (~356×394 transparent PNG).
 
-Expected: `scripts/logo-source.png` exists (740×834).
-
-- [ ] **Step 2: Write the processing script**
-
-`scripts/process-logo.py` — crops to the hexagon mark (drops the tiny baked-in text band) and knocks out the white background to transparent:
-
-```python
-from PIL import Image
-
-src = Image.open("scripts/logo-source.png").convert("RGBA")
-
-# Crop to the hexagon mark, excluding the tiny legal text below (~y>=715).
-mark = src.crop((110, 150, 660, 715))
-
-# Knock out the white background: near-white -> transparent, with a soft edge band.
-px = mark.load()
-w, h = mark.size
-for y in range(h):
-    for x in range(w):
-        r, g, b, a = px[x, y]
-        m = min(r, g, b)
-        if m >= 244:
-            px[x, y] = (r, g, b, 0)
-        elif m >= 225:
-            # anti-alias band near the stroke edges
-            alpha = int((244 - m) / (244 - 225) * 255)
-            px[x, y] = (r, g, b, alpha)
-
-# Trim fully-transparent margins so the mark is tightly bounded.
-bbox = mark.getbbox()
-mark = mark.crop(bbox)
-mark.save("public/assets/hoe-logo-mark.png")
-print("saved", mark.size)
-```
-
-- [ ] **Step 3: Run the script**
-
-Run: `python3 scripts/process-logo.py`
-Expected: prints `saved (W, H)`; `public/assets/hoe-logo-mark.png` created.
-
-- [ ] **Step 4: Visually verify the mark**
-
-Open `public/assets/hoe-logo-mark.png`. Confirm: hexagon house + wifi mark only (no legal text), transparent background, no heavy white halo. If a halo is visible, raise the `244` threshold toward `250` and re-run; if edges look chewed, lower `225`.
-
-- [ ] **Step 5: Add `BrandLogo` to `src/app/(ui)/components.tsx`**
+- [ ] **Step 2: Add `BrandLogo` to `src/app/(ui)/components.tsx`**
 
 Add near the other exports (keep existing imports of `Image`/`Link`):
 
@@ -596,8 +550,8 @@ export function BrandLogo({
       <Image
         src="/assets/hoe-logo-mark.png"
         alt="House of Electronics logo"
-        width={160}
-        height={160}
+        width={356}
+        height={394}
         className={markClassName}
         priority
       />
@@ -611,20 +565,16 @@ export function BrandLogo({
 }
 ```
 
-- [ ] **Step 6: Remove the temporary script and source**
-
-Run: `rm scripts/process-logo.py scripts/logo-source.png && rmdir scripts 2>/dev/null || true`
-
-- [ ] **Step 7: Verify build**
+- [ ] **Step 3: Verify build**
 
 Run: `npm run build`
 Expected: succeeds.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add public/assets/hoe-logo-mark.png "src/app/(ui)/components.tsx"
-git commit -m "feat: processed transparent logo mark + BrandLogo component"
+git add "src/app/(ui)/components.tsx"
+git commit -m "feat: BrandLogo component (mark + House of Electronics wordmark)"
 ```
 
 ---
