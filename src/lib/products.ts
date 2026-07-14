@@ -226,3 +226,28 @@ export function searchProducts(query: string): Product[] {
       p.category.toLowerCase().includes(q)
   );
 }
+
+// ---- Categories (derived from the catalog, not hardcoded) ----
+
+const CATEGORY_NAMES: Record<string, string> = {
+  mac: "Mac",
+  iphone: "iPhone",
+  ipad: "iPad",
+  watch: "Watch",
+  audio: "Audio",
+  accessories: "Accessories",
+};
+
+export function categoryName(slug: string): string {
+  return CATEGORY_NAMES[slug] ?? slug.charAt(0).toUpperCase() + slug.slice(1);
+}
+
+export type CategorySummary = { slug: string; name: string; count: number };
+
+export function getCategories(): CategorySummary[] {
+  const counts = new Map<string, number>();
+  for (const p of products) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+  return [...counts.entries()]
+    .map(([slug, count]) => ({ slug, name: categoryName(slug), count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}

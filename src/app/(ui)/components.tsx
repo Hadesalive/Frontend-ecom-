@@ -339,8 +339,8 @@ export function Footer() {
             <h3 className="font-semibold text-lg">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link href="/shop" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Shop All</Link></li>
-              <li><Link href="/categories/laptops" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Laptops</Link></li>
-              <li><Link href="/categories/phones" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Phones</Link></li>
+              <li><Link href="/categories/mac" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Mac</Link></li>
+              <li><Link href="/categories/iphone" className="text-muted-foreground hover:text-foreground transition-colors text-sm">iPhone</Link></li>
               <li><Link href="/categories/accessories" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Accessories</Link></li>
               <li><Link href="/repairs" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Repairs</Link></li>
             </ul>

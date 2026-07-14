@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { products, type Product } from "@/lib/products";
+import { products, type Product, getCategories } from "@/lib/products";
 import { formatPrice } from "@/lib/currency";
 import { useCart } from "@/components/cart/cart-context";
 
@@ -98,14 +98,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-const categories = [
-  { slug: "mac", name: "Mac", count: 24 },
-  { slug: "iphone", name: "iPhone", count: 18 },
-  { slug: "ipad", name: "iPad", count: 12 },
-  { slug: "watch", name: "Watch", count: 8 },
-  { slug: "audio", name: "Audio", count: 15 },
-  { slug: "accessories", name: "Accessories", count: 32 },
-];
+const categories = getCategories();
 
 
 const sortOptions = [
