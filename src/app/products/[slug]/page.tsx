@@ -20,97 +20,17 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState, use } from "react";
+import { getProductBySlug } from "@/lib/products";
+import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/components/cart/cart-context";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Mock product data - in real app this would come from API/database
-const getProductData = (slug: string) => {
-  const products = {
-    "macbook-air-m3": {
-      id: 1,
-      name: "MacBook Air M3",
-      price: 1299,
-      originalPrice: 1499,
-      rating: 4.8,
-      reviews: 124,
-      images: [
-        "/assets/photo-1598094670018-abf669538033.avif",
-        "/assets/photo-1585565804112-f201f68c48b4.avif",
-        "/assets/photo-1594344141311-8ea00ba55612.avif"
-      ],
-      category: "mac",
-      badge: "Best Seller",
-      inStock: true,
-      description: "The MacBook Air with M3 chip delivers exceptional performance in an incredibly thin and light design. Perfect for everything from everyday tasks to creative projects.",
-      features: [
-        "M3 chip with 8-core CPU and 8-core GPU",
-        "13.6-inch Liquid Retina display",
-        "Up to 18 hours of battery life",
-        "8GB unified memory",
-        "256GB SSD storage",
-        "1080p FaceTime HD camera",
-        "Touch ID"
-      ],
-      specifications: {
-        "Display": "13.6-inch Liquid Retina display",
-        "Processor": "Apple M3 chip",
-        "Memory": "8GB unified memory",
-        "Storage": "256GB SSD",
-        "Graphics": "8-core GPU",
-        "Camera": "1080p FaceTime HD camera",
-        "Battery": "Up to 18 hours",
-        "Weight": "2.7 pounds (1.24 kg)"
-      }
-    },
-    "iphone-15-pro": {
-      id: 2,
-      name: "iPhone 15 Pro",
-      price: 999,
-      originalPrice: 1199,
-      rating: 4.9,
-      reviews: 89,
-      images: [
-        "/assets/photo-1585565804112-f201f68c48b4.avif",
-        "/assets/photo-1598094670018-abf669538033.avif",
-        "/assets/photo-1594344141311-8ea00ba55612.avif"
-      ],
-      category: "iphone",
-      badge: "New",
-      inStock: true,
-      description: "The iPhone 15 Pro features the A17 Pro chip, titanium design, and advanced camera system. Built for pro users who demand the best.",
-      features: [
-        "A17 Pro chip with 6-core CPU",
-        "6.1-inch Super Retina XDR display",
-        "Pro camera system with 48MP main camera",
-        "Titanium design",
-        "Action Button",
-        "USB-C connector",
-        "5G capable"
-      ],
-      specifications: {
-        "Display": "6.1-inch Super Retina XDR",
-        "Processor": "A17 Pro chip",
-        "Storage": "128GB, 256GB, 512GB, 1TB",
-        "Camera": "48MP Main, 12MP Ultra Wide, 12MP Telephoto",
-        "Battery": "Up to 23 hours video playback",
-        "Materials": "Titanium with Ceramic Shield",
-        "Connectivity": "5G, Wi-Fi 6E, Bluetooth 5.3"
-      }
-    }
-  };
-  
-  return products[slug as keyof typeof products] || products["macbook-air-m3"];
-};
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-}
 
 export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
-  const product = getProductData(resolvedParams.slug);
+  const product = getProductBySlug(resolvedParams.slug);
+  const { addItem } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -118,17 +38,36 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [showAddedNotification, setShowAddedNotification] = useState(false);
 
   const handleAddToCart = async () => {
+    if (!product) return;
     setIsAddingToCart(true);
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     setIsAddingToCart(false);
+    addItem(product, quantity);
     setShowAddedNotification(true);
     
     // Hide notification after 3 seconds
     setTimeout(() => setShowAddedNotification(false), 3000);
   };
+
+  if (!product) {
+    return (
+      <div>
+        <Nav />
+        <section className="pt-24 pb-16 container-max text-center">
+          <h1 className="text-3xl font-semibold">Product not found</h1>
+          <p className="text-[--color-muted-foreground] mt-2">
+            The product you are looking for doesn&apos;t exist.
+          </p>
+          <Button asChild className="mt-6" style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}>
+            <Link href="/shop">Back to Shop</Link>
+          </Button>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -317,7 +256,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 <div className="text-center">
                   <Truck className="w-6 h-6 mx-auto mb-2 text-[--accent]" />
                   <p className="text-sm font-medium">Free Shipping</p>
-                  <p className="text-xs text-[--color-muted-foreground]">On orders over $100</p>
+                  <p className="text-xs text-[--color-muted-foreground]">On qualifying orders</p>
                 </div>
                 <div className="text-center">
                   <Shield className="w-6 h-6 mx-auto mb-2 text-[--accent]" />
@@ -335,11 +274,12 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
         </div>
       </section>
 
-      {/* Features & Specifications */}
+      {(product.features.length > 0 || Object.keys(product.specifications).length > 0) && (
       <section className="py-16" style={{ background: 'color-mix(in oklab, var(--background) 95%, var(--accent) 5%)' }}>
         <div className="container-max">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Features */}
+            {product.features.length > 0 && (
             <div>
               <h2 className="text-3xl font-bold mb-8">Key Features</h2>
               <ul className="space-y-4">
@@ -351,8 +291,10 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 ))}
               </ul>
             </div>
+            )}
 
             {/* Specifications */}
+            {Object.keys(product.specifications).length > 0 && (
             <div>
               <h2 className="text-3xl font-bold mb-8">Specifications</h2>
               <div className="space-y-4">
@@ -364,9 +306,11 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 ))}
               </div>
             </div>
+            )}
           </div>
         </div>
       </section>
+      )}
 
       {/* Success Notification */}
       <AnimatePresence>

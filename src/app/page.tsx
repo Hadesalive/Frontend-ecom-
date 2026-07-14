@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Nav, BrandLogo } from "./(ui)/components";
+import { formatPrice as formatNle } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
@@ -173,10 +174,9 @@ type ProductItem = { title: string; image: string; price?: string; href?: string
 
 function formatPrice(input?: string) {
   if (!input) return undefined;
-  if (/^\$/.test(input)) return input;
-  const asNum = Number(input);
-  if (Number.isFinite(asNum)) return asNum.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-  return input;
+  const asNum = Number(String(input).replace(/[^0-9.]/g, ""));
+  if (!Number.isFinite(asNum)) return input;
+  return formatNle(asNum);
 }
 
 function Product({ title, image, price, href = "/shop" , badge }: ProductItem & { index?: number }) {

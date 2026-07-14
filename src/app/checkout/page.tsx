@@ -19,35 +19,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/components/cart/cart-context";
 
-// Mock order data - in real app this would come from context/state management
-const mockOrderItems = [
-  {
-    id: 1,
-    name: "MacBook Air M3",
-    price: 1299,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    quantity: 1,
-    badge: "Best Seller"
-  },
-  {
-    id: 2,
-    name: "iPhone 15 Pro",
-    price: 999,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    quantity: 1,
-    badge: "New"
-  }
-];
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-}
 
 export default function CheckoutPage() {
+  const { items: orderItems, subtotal, clear } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [formData, setFormData] = useState({
@@ -64,7 +42,6 @@ export default function CheckoutPage() {
     nameOnCard: ""
   });
 
-  const subtotal = mockOrderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 100 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -82,6 +59,7 @@ export default function CheckoutPage() {
     
     setIsProcessing(false);
     setIsComplete(true);
+    clear();
   };
 
   if (isComplete) {
@@ -348,8 +326,8 @@ export default function CheckoutPage() {
                 <CardContent className="space-y-6">
                   {/* Order Items */}
                   <div className="space-y-4">
-                    {mockOrderItems.map((item) => (
-                      <div key={item.id} className="flex gap-3">
+                    {orderItems.map((item) => (
+                      <div key={item.slug} className="flex gap-3">
                         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                           <Image
                             src={item.image}

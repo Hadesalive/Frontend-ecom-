@@ -13,29 +13,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { products, type Product } from "@/lib/products";
+import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/components/cart/cart-context";
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-}
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  rating: number;
-  reviews: number;
-  image: string;
-  category: string;
-  badge: string;
-  inStock: boolean;
-}
 
 function ProductCard({ product }: { product: Product }) {
   const [fav, setFav] = useState(false);
+  const { addItem } = useCart();
   return (
     <Card className="group transition-all duration-300 border-none bg-transparent shadow-none p-0 h-full">
       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
@@ -68,7 +54,7 @@ function ProductCard({ product }: { product: Product }) {
         <div className="flex items-center justify-between gap-3">
           <div>
             <div className="font-medium leading-none">
-              <Link href={`/products/${product.id}`} className="link hover:opacity-80">{product.name}</Link>
+              <Link href={`/products/${product.slug}`} className="link hover:opacity-80">{product.name}</Link>
             </div>
             <span className="block h-[2px] w-10 mt-2 rounded-full" style={{ background: 'var(--accent)' }} />
             <div className="text-[13px] text-[--color-muted-foreground] mt-1">
@@ -82,12 +68,13 @@ function ProductCard({ product }: { product: Product }) {
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Button asChild variant="ghost" className="h-8 px-3 text-[--color-accent]">
-              <Link href={`/products/${product.id}`}>View</Link>
+              <Link href={`/products/${product.slug}`}>View</Link>
             </Button>
             <Button 
               size="sm" 
               className="h-8 gap-1" 
               disabled={!product.inStock}
+              onClick={() => addItem(product)}
               style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}
             >
               <ShoppingBagIcon className="h-4 w-4" />
@@ -120,104 +107,6 @@ const categories = [
   { slug: "accessories", name: "Accessories", count: 32 },
 ];
 
-const products = [
-  {
-    id: 1,
-    name: "MacBook Air M3",
-    price: 1299,
-    originalPrice: 1499,
-    rating: 4.8,
-    reviews: 124,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    category: "mac",
-    badge: "Best Seller",
-    inStock: true
-  },
-  {
-    id: 2,
-    name: "iPhone 15 Pro",
-    price: 999,
-    originalPrice: 1199,
-    rating: 4.9,
-    reviews: 89,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    category: "iphone",
-    badge: "New",
-    inStock: true
-  },
-  {
-    id: 3,
-    name: "iPad Pro 12.9\"",
-    price: 1099,
-    originalPrice: 1299,
-    rating: 4.7,
-    reviews: 67,
-    image: "/assets/photo-1594344141311-8ea00ba55612.avif",
-    category: "ipad",
-    badge: "Sale",
-    inStock: true
-  },
-  {
-    id: 4,
-    name: "Apple Watch Series 9",
-    price: 399,
-    originalPrice: 449,
-    rating: 4.6,
-    reviews: 156,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    category: "watch",
-    badge: "Popular",
-    inStock: false
-  },
-  {
-    id: 5,
-    name: "AirPods Pro 2nd Gen",
-    price: 249,
-    originalPrice: 279,
-    rating: 4.8,
-    reviews: 203,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    category: "audio",
-    badge: "Limited",
-    inStock: true
-  },
-  {
-    id: 6,
-    name: "Magic Keyboard",
-    price: 99,
-    originalPrice: 129,
-    rating: 4.5,
-    reviews: 78,
-    image: "/assets/photo-1594344141311-8ea00ba55612.avif",
-    category: "accessories",
-    badge: "Deal",
-    inStock: true
-  },
-  {
-    id: 7,
-    name: "Mac Studio M2 Ultra",
-    price: 3999,
-    originalPrice: 4499,
-    rating: 4.9,
-    reviews: 45,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    category: "mac",
-    badge: "Pro",
-    inStock: true
-  },
-  {
-    id: 8,
-    name: "iPhone 15",
-    price: 799,
-    originalPrice: 899,
-    rating: 4.7,
-    reviews: 112,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    category: "iphone",
-    badge: "Trending",
-    inStock: true
-  }
-];
 
 const sortOptions = [
   { value: "featured", label: "Featured" },

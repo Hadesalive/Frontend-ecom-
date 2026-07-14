@@ -20,53 +20,16 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/components/cart/cart-context";
+import { type CartItem as CartLine } from "@/components/cart/cart-logic";
 
-// Mock cart data - in real app this would come from context/state management
-const mockCartItems = [
-  {
-    id: 1,
-    name: "MacBook Air M3",
-    price: 1299,
-    originalPrice: 1499,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    quantity: 1,
-    inStock: true,
-    badge: "Best Seller"
-  },
-  {
-    id: 2,
-    name: "iPhone 15 Pro",
-    price: 999,
-    originalPrice: 1199,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    quantity: 2,
-    inStock: true,
-    badge: "New"
-  },
-  {
-    id: 3,
-    name: "iPad Pro 12.9\"",
-    price: 1099,
-    originalPrice: null,
-    image: "/assets/photo-1594344141311-8ea00ba55612.avif",
-    quantity: 1,
-    inStock: false,
-    badge: "Limited"
-  }
-];
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-}
 
-function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
-  item: typeof mockCartItems[0];
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemove: (id: number) => void;
-  onToggleFavorite: (id: number) => void;
+function CartItem({ item, onUpdateQuantity, onRemove }: {
+  item: CartLine;
+  onUpdateQuantity: (slug: string, quantity: number) => void;
+  onRemove: (slug: string) => void;
 }) {
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -128,7 +91,7 @@ function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
               {/* Actions */}
               <div className="flex items-center gap-2 ml-0 sm:ml-4">
                 <button
-                  onClick={() => onToggleFavorite(item.id)}
+                  onClick={() => setIsFavorited((v) => !v)}
                   className={`p-2 rounded-full transition-colors ${
                     isFavorited 
                       ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' 
@@ -138,7 +101,7 @@ function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
                   <HeartIcon className={`w-4 h-4 ${isFavorited ? 'fill-current' : ''}`} />
                 </button>
                 <button
-                  onClick={() => onRemove(item.id)}
+                  onClick={() => onRemove(item.slug)}
                   className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 hover:text-red-600 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -152,7 +115,7 @@ function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                  onClick={() => onUpdateQuantity(item.slug, Math.max(1, item.quantity - 1))}
                   className="h-8 w-8"
                   disabled={item.quantity <= 1}
                 >
@@ -164,7 +127,7 @@ function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                  onClick={() => onUpdateQuantity(item.slug, item.quantity + 1)}
                   className="h-8 w-8"
                   disabled={!item.inStock}
                 >
@@ -200,27 +163,9 @@ function CartItem({ item, onUpdateQuantity, onRemove, onToggleFavorite }: {
 }
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState(mockCartItems);
+  const { items: cartItems, subtotal, updateQty, removeItem } = useCart();
   const router = useRouter();
 
-  const updateQuantity = (id: number, quantity: number) => {
-    setCartItems(items => 
-      items.map(item => 
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
-
-  const toggleFavorite = (id: number) => {
-    // In real app, this would update the item's favorite status
-    console.log('Toggle favorite for item:', id);
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 100 ? 0 : 9.99;
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
@@ -271,11 +216,10 @@ export default function CartPage() {
                 <AnimatePresence mode="popLayout">
                   {cartItems.map((item) => (
                     <CartItem
-                      key={item.id}
+                      key={item.slug}
                       item={item}
-                      onUpdateQuantity={updateQuantity}
+                      onUpdateQuantity={updateQty}
                       onRemove={removeItem}
-                      onToggleFavorite={toggleFavorite}
                     />
                   ))}
                 </AnimatePresence>
