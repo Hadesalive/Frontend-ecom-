@@ -54,23 +54,27 @@ function productFromForm(fd: FormData): data.ProductInput {
 
 export async function createProductAction(fd: FormData) {
   await requireAdmin();
-  await data.createProduct(productFromForm(fd));
+  const input = productFromForm(fd);
+  await data.createProduct(input);
   revalidatePath("/dashboard/products");
-  redirect("/dashboard/products");
+  redirect(`/dashboard/products/${input.slug}`);
 }
 
 export async function updateProductAction(fd: FormData) {
   await requireAdmin();
   const id = num(fd, "id");
-  await data.updateProduct(id, productFromForm(fd));
+  const input = productFromForm(fd);
+  await data.updateProduct(id, input);
   revalidatePath("/dashboard/products");
-  redirect("/dashboard/products");
+  revalidatePath(`/dashboard/products/${input.slug}`);
+  redirect(`/dashboard/products/${input.slug}`);
 }
 
 export async function deleteProductAction(fd: FormData) {
   await requireAdmin();
   await data.deleteProduct(num(fd, "id"));
   revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
 }
 
 export async function setStockAction(fd: FormData) {

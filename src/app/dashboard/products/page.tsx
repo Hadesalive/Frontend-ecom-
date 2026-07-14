@@ -38,7 +38,9 @@ export default async function ProductsPage() {
                         <Image src={p.image} alt={p.name} fill className="object-cover" sizes="40px" />
                       </div>
                       <div>
-                        <div className="font-medium">{p.name}</div>
+                        <Link href={`/dashboard/products/${p.slug}`} className="font-medium text-[--accent] hover:underline">
+                          {p.name}
+                        </Link>
                         <div className="text-[12px] text-[--color-muted-foreground]">{p.slug}</div>
                       </div>
                     </div>
@@ -54,8 +56,8 @@ export default async function ProductsPage() {
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <Link href={`/dashboard/products/${p.id}/edit`} className="h-8 px-3 inline-flex items-center rounded-md border border-[--color-border] hover:bg-[--color-muted]">
-                        Edit
+                      <Link href={`/dashboard/products/${p.slug}`} className="h-8 px-3 inline-flex items-center rounded-md border border-[--color-border] hover:bg-[--color-muted]">
+                        Manage
                       </Link>
                       <form action={deleteProductAction}>
                         <input type="hidden" name="id" value={p.id} />
