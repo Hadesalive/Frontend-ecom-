@@ -173,7 +173,7 @@ export default function SupportPage() {
               </div>
               <div className="flex items-center gap-3">
                 <EnvelopeIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
-                <a href="mailto:support@topnotchelectronics.sl" className="hover:underline">support@topnotchelectronics.sl</a>
+                <a href="mailto:support@houseofelectronics.sl" className="hover:underline">support@houseofelectronics.sl</a>
               </div>
               <div className="flex items-center gap-3">
                 <ClockIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
@@ -217,7 +217,7 @@ export default function SupportPage() {
             <a href="tel:+23200000000" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <PhoneIcon className="h-5 w-5 mr-2" /> Call now
             </a>
-            <a href="mailto:support@topnotchelectronics.sl" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold border" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+            <a href="mailto:support@houseofelectronics.sl" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold border" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
               <EnvelopeIcon className="h-5 w-5 mr-2" /> Email us
             </a>
           </div>

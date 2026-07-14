@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Topnotch Electronics",
-  description: "Apple-quality devices and repairs. Storefront & dashboard.",
+  title: "House of Electronics",
+  description: "Where technology comes home. Premium electronics and expert repairs in Sierra Leone.",
 };
 
 export default function RootLayout({

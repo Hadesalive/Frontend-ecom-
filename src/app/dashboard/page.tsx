@@ -27,7 +27,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 export default function DashboardPage() {
   const [active, setActive] = useState("Overview");
-  const accent = (typeof window !== 'undefined' ? getComputedStyle(document.documentElement).getPropertyValue('--accent') : '') || '#ff7a00';
+  const accent = (typeof window !== 'undefined' ? getComputedStyle(document.documentElement).getPropertyValue('--accent') : '') || '#2f6fb5';
   const lineOptions: ChartOptions<'line'> = { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(127,127,127,0.2)' } } } };
   const doughnutOptions: ChartOptions<'doughnut'> = { plugins: { legend: { display: false } } };
   const barOptions: ChartOptions<'bar'> = { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(127,127,127,0.2)' } } } };
