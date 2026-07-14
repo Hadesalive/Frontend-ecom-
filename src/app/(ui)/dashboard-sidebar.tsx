@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FooterLogo } from "./components";
+import { BrandLogo } from "./components";
 import {
   Squares2X2Icon,
   ShoppingBagIcon,
@@ -47,8 +47,10 @@ export function DashboardSidebar({
     : "px-3 lg:px-4 h-fit lg:h-[calc(100vh-6rem)] sticky top-0 pt-3.5 border-r";
   return (
     <aside className={wrapperClasses} style={{ borderColor: drawer ? undefined : "var(--color-border)" }}>
-      <div className="h-12 flex items-center mb-2 px-1">
-        <FooterLogo />
+      <div className="h-14 flex items-center mb-3 px-1 overflow-hidden">
+        <Link href="/dashboard" aria-label="House of Electronics" className="flex items-center min-w-0">
+          <BrandLogo markClassName="h-8 w-auto shrink-0" wordmarkClassName="text-sm font-semibold tracking-tight truncate" />
+        </Link>
       </div>
       <nav className="space-y-0.5 mt-2">
         {items.map(({ name, href, icon: Icon }) => {
