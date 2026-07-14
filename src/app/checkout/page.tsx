@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { formatPrice } from "@/lib/currency";
 import { useCart } from "@/components/cart/cart-context";
+import { placeOrderAction } from "./actions";
 
 
 
@@ -28,6 +29,8 @@ export default function CheckoutPage() {
   const { items: orderItems, subtotal, clear } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -52,14 +55,29 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (orderItems.length === 0) {
+      setError("Your cart is empty.");
+      return;
+    }
+    setError(null);
     setIsProcessing(true);
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
+    const result = await placeOrderAction({
+      name: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      items: orderItems.map((it) => ({ slug: it.slug, name: it.name, price: it.price, quantity: it.quantity })),
+    });
+
     setIsProcessing(false);
-    setIsComplete(true);
-    clear();
+    if (result.ok) {
+      setOrderNumber(result.number);
+      clear();
+      setIsComplete(true);
+    } else {
+      setError(result.error);
+    }
   };
 
   if (isComplete) {
@@ -82,10 +100,18 @@ export default function CheckoutPage() {
               </motion.div>
               
               <h1 className="text-4xl font-bold mb-4 text-[--color-foreground]">Order Confirmed!</h1>
-              <p className="text-lg text-[--color-muted-foreground] mb-8">
-                Thank you for your purchase. We&apos;ve sent you a confirmation email with your order details.
+              <p className="text-lg text-[--color-muted-foreground] mb-2">
+                Thank you for your purchase — your order has been placed.
               </p>
-              
+              {orderNumber ? (
+                <p className="text-base mb-8">
+                  Order reference:{" "}
+                  <span className="font-semibold" style={{ color: 'var(--accent)' }}>{orderNumber}</span>
+                </p>
+              ) : (
+                <div className="mb-8" />
+              )}
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                   <Link href="/shop">Continue Shopping</Link>
@@ -286,6 +312,15 @@ export default function CheckoutPage() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {error ? (
+                  <div
+                    className="text-sm rounded-lg px-3 py-2"
+                    style={{ background: 'color-mix(in oklab, #dc2626 12%, var(--background))', color: '#dc2626' }}
+                  >
+                    {error}
+                  </div>
+                ) : null}
 
                 {/* Submit Button */}
                 <Button
