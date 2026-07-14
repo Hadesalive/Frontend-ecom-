@@ -1,8 +1,9 @@
 import { Nav, PageHeader } from "../../(ui)/components";
 import Link from "next/link";
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const title = params.slug.replaceAll("-", " ");
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const title = slug.replaceAll("-", " ");
   const items = Array.from({ length: 6 }).map((_, i) => `${title} ${i + 1}`);
   return (
     <div>
