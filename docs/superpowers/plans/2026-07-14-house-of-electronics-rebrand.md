@@ -587,8 +587,8 @@ git commit -m "feat: BrandLogo component (mark + House of Electronics wordmark)"
 - Modify: `src/app/(ui)/components.tsx` (Nav logo + cart badge, Footer/FooterLogo name)
 - Modify: `src/app/page.tsx` (homepage hero copy, inline footer logo + name)
 - Modify: `src/app/about/page.tsx`, `src/app/support/page.tsx`, `src/app/contact/page.tsx`
-- Modify: `src/components/ui/testimonials-demo.tsx`, `src/components/ui/circular-testimonials-demo.tsx`
 - Delete: `public/assets/topnotch-logo-dark.png`, `public/assets/topnotch-logo-light.png`
+- (Note: the two unused `*-testimonials-demo.tsx` files that previously held brand strings were already deleted as a build-baseline fix — do NOT recreate them.)
 
 **Interfaces:**
 - Consumes: `BrandLogo` (Task 5), `useCart` (Task 4).
@@ -693,8 +693,6 @@ Replace every user-facing `TopNotch Electronics` / `Topnotch Electronics` / `Top
 - `src/app/about/page.tsx` (5)
 - `src/app/support/page.tsx` (2)
 - `src/app/contact/page.tsx` (1)
-- `src/components/ui/testimonials-demo.tsx` (3)
-- `src/components/ui/circular-testimonials-demo.tsx` (5)
 
 - [ ] **Step 9: Delete the old logo assets**
 
