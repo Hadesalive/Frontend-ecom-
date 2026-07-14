@@ -1,7 +1,6 @@
 "use client";
 
-import { Nav, Footer } from "../(ui)/components";
-import { useEffect, useState } from "react";
+import { Nav, Footer, BrandLogo } from "../(ui)/components";
 import Image from "next/image";
 import { 
   CursorArrowRaysIcon,
@@ -14,16 +13,6 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function AboutPage() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('theme-dark'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
   return (
     <main className="min-h-screen" style={{ background: "var(--background)" }}>
       <Nav />
@@ -52,7 +41,7 @@ export default function AboutPage() {
               Sierra Leone • Est. 2018
             </p>
             <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
-              About TopNotch Electronics
+              About House of Electronics
             </h1>
             <p className="text-base md:text-lg text-[--color-muted-foreground] mb-8" style={{ textShadow: '0 1px 1px rgba(0,0,0,0.15)' }}>
               Founded in August 2018, we&apos;re Sierra Leone&apos;s premier electronics company,
@@ -98,7 +87,7 @@ export default function AboutPage() {
                   Founded on Vision
                 </h3>
                 <p className="text-[--color-muted-foreground] leading-relaxed mb-4">
-                  TopNotch Electronics SL Ltd. was founded in August 2018 as a Private Limited Company 
+                  Type A House of Electronics (SL) Ltd. was founded in August 2018 as a Private Limited Company
                   through the foresight and vision of one director. It was formed as a tool with the 
                   director having identified a large potential market for their products and services.
                 </p>
@@ -111,14 +100,7 @@ export default function AboutPage() {
               
               <div className="flex justify-center">
                 <div className="relative flex items-center justify-center w-64 h-40 md:w-80 md:h-52 rounded-2xl overflow-hidden shadow-lg bg-[--color-card]">
-                  <Image
-                    src={isDark ? "/assets/topnotch-logo-light.png" : "/assets/topnotch-logo-dark.png"}
-                    alt="TopNotch Electronics logo"
-                    fill
-                    className="object-contain p-6"
-                    sizes="(max-width: 768px) 256px, 320px"
-                    priority
-                  />
+                  <BrandLogo showWordmark={false} markClassName="h-24 md:h-32 w-auto" />
                 </div>
               </div>
             </div>
@@ -299,7 +281,7 @@ export default function AboutPage() {
         <div className="container-max">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[--color-foreground]">
-              Ready to Experience TopNotch Service?
+              Ready to Experience the Difference?
             </h2>
             <p className="text-base md:text-lg text-[--color-muted-foreground] mb-10">
               Discover our premium electronics, expert repairs, and personalized service 

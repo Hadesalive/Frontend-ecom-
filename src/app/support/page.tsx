@@ -2,6 +2,7 @@
 
 import { Nav, Footer } from "../(ui)/components";
 import Image from "next/image";
+import { formatPrice as formatNle } from "@/lib/currency";
 import { PhoneIcon, EnvelopeIcon, WrenchScrewdriverIcon, LifebuoyIcon, ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 export default function SupportPage() {
@@ -105,11 +106,11 @@ export default function SupportPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {n:'Diagnostics',p:'Free',img:'/assets/photo-1598094670018-abf669538033.avif'},
-              {n:'Battery replacement',p:'From $49',img:'/assets/photo-1585565804112-f201f68c48b4.avif'},
-              {n:'Screen repair',p:'From $79',img:'/assets/photo-1594344141311-8ea00ba55612.avif'},
-              {n:'Data recovery',p:'From $99',img:'/assets/photo-1598094670018-abf669538033.avif'},
-              {n:'Storage upgrade',p:'From $79',img:'/assets/photo-1585565804112-f201f68c48b4.avif'},
-              {n:'Cleaning & thermal service',p:'From $39',img:'/assets/photo-1594344141311-8ea00ba55612.avif'}
+              {n:'Battery replacement',p:`From ${formatNle(49)}`,img:'/assets/photo-1585565804112-f201f68c48b4.avif'},
+              {n:'Screen repair',p:`From ${formatNle(79)}`,img:'/assets/photo-1594344141311-8ea00ba55612.avif'},
+              {n:'Data recovery',p:`From ${formatNle(99)}`,img:'/assets/photo-1598094670018-abf669538033.avif'},
+              {n:'Storage upgrade',p:`From ${formatNle(79)}`,img:'/assets/photo-1585565804112-f201f68c48b4.avif'},
+              {n:'Cleaning & thermal service',p:`From ${formatNle(39)}`,img:'/assets/photo-1594344141311-8ea00ba55612.avif'}
             ].map(({n,p,img}) => (
               <div key={n} className="group relative overflow-hidden rounded-2xl border border-[--color-border] hover:border-[--ring] transition-all duration-300 hover:shadow-xl">
                 <div className="relative aspect-[4/3]">
@@ -173,7 +174,7 @@ export default function SupportPage() {
               </div>
               <div className="flex items-center gap-3">
                 <EnvelopeIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
-                <a href="mailto:support@topnotchelectronics.sl" className="hover:underline">support@topnotchelectronics.sl</a>
+                <a href="mailto:support@houseofelectronics.sl" className="hover:underline">support@houseofelectronics.sl</a>
               </div>
               <div className="flex items-center gap-3">
                 <ClockIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
@@ -217,7 +218,7 @@ export default function SupportPage() {
             <a href="tel:+23200000000" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
               <PhoneIcon className="h-5 w-5 mr-2" /> Call now
             </a>
-            <a href="mailto:support@topnotchelectronics.sl" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold border" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+            <a href="mailto:support@houseofelectronics.sl" className="inline-flex items-center justify-center px-6 h-11 rounded-xl font-semibold border" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
               <EnvelopeIcon className="h-5 w-5 mr-2" /> Email us
             </a>
           </div>

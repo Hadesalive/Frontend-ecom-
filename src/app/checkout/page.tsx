@@ -19,37 +19,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/components/cart/cart-context";
+import { placeOrderAction } from "./actions";
 
-// Mock order data - in real app this would come from context/state management
-const mockOrderItems = [
-  {
-    id: 1,
-    name: "MacBook Air M3",
-    price: 1299,
-    image: "/assets/photo-1598094670018-abf669538033.avif",
-    quantity: 1,
-    badge: "Best Seller"
-  },
-  {
-    id: 2,
-    name: "iPhone 15 Pro",
-    price: 999,
-    image: "/assets/photo-1585565804112-f201f68c48b4.avif",
-    quantity: 1,
-    badge: "New"
-  }
-];
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
-}
 
 export default function CheckoutPage() {
+  const { items: orderItems, subtotal, clear } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -64,7 +45,6 @@ export default function CheckoutPage() {
     nameOnCard: ""
   });
 
-  const subtotal = mockOrderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = subtotal > 100 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -75,13 +55,29 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (orderItems.length === 0) {
+      setError("Your cart is empty.");
+      return;
+    }
+    setError(null);
     setIsProcessing(true);
-    
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
+    const result = await placeOrderAction({
+      name: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      items: orderItems.map((it) => ({ slug: it.slug, name: it.name, price: it.price, quantity: it.quantity })),
+    });
+
     setIsProcessing(false);
-    setIsComplete(true);
+    if (result.ok) {
+      setOrderNumber(result.number);
+      clear();
+      setIsComplete(true);
+    } else {
+      setError(result.error);
+    }
   };
 
   if (isComplete) {
@@ -104,10 +100,18 @@ export default function CheckoutPage() {
               </motion.div>
               
               <h1 className="text-4xl font-bold mb-4 text-[--color-foreground]">Order Confirmed!</h1>
-              <p className="text-lg text-[--color-muted-foreground] mb-8">
-                Thank you for your purchase. We&apos;ve sent you a confirmation email with your order details.
+              <p className="text-lg text-[--color-muted-foreground] mb-2">
+                Thank you for your purchase — your order has been placed.
               </p>
-              
+              {orderNumber ? (
+                <p className="text-base mb-8">
+                  Order reference:{" "}
+                  <span className="font-semibold" style={{ color: 'var(--accent)' }}>{orderNumber}</span>
+                </p>
+              ) : (
+                <div className="mb-8" />
+              )}
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                   <Link href="/shop">Continue Shopping</Link>
@@ -309,6 +313,15 @@ export default function CheckoutPage() {
                   </CardContent>
                 </Card>
 
+                {error ? (
+                  <div
+                    className="text-sm rounded-lg px-3 py-2"
+                    style={{ background: 'color-mix(in oklab, #dc2626 12%, var(--background))', color: '#dc2626' }}
+                  >
+                    {error}
+                  </div>
+                ) : null}
+
                 {/* Submit Button */}
                 <Button
                   type="submit"
@@ -348,8 +361,8 @@ export default function CheckoutPage() {
                 <CardContent className="space-y-6">
                   {/* Order Items */}
                   <div className="space-y-4">
-                    {mockOrderItems.map((item) => (
-                      <div key={item.id} className="flex gap-3">
+                    {orderItems.map((item) => (
+                      <div key={item.slug} className="flex gap-3">
                         <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                           <Image
                             src={item.image}

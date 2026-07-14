@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import Image from "next/image";
+import { useCart } from "@/components/cart/cart-context";
 
 export function Nav() {
+  const { count } = useCart();
   const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOverHero, setIsOverHero] = useState(false);
@@ -65,16 +67,8 @@ export function Nav() {
           : "bg-transparent backdrop-blur-0"
       }`}>
         <div className="container-max h-20 flex items-center justify-between">
-          <Link href="/" aria-label="Topnotch Electronics" className="flex items-center">
-            <Image
-              key={isDark ? "dark" : "light"}
-              src={isDark ? "/assets/topnotch-logo-light.png" : "/assets/topnotch-logo-dark.png"}
-              alt="Topnotch Electronics logo"
-              height={96}
-              width={360}
-              className="h-16 md:h-20 lg:h-24 w-auto"
-              priority
-            />
+          <Link href="/" aria-label="House of Electronics" className="flex items-center">
+            <BrandLogo markClassName="h-12 md:h-14 w-auto" />
           </Link>
           <nav className="hidden md:flex items-center gap-4 text-[15px]">
             {items.map((it) => {
@@ -118,16 +112,26 @@ export function Nav() {
           <div className="flex items-center gap-1 md:hidden">
             <Button asChild variant="ghost" size="icon" className={`h-9 w-9 ${!isScrolled && isOverHero && !isDark ? "text-white" : ""}`} aria-label="Cart">
               <Link href="/cart">
-                <ShoppingBagIcon 
-                  className="h-5 w-5"
-                  style={{ 
-                    color: pathname === "/cart" 
-                      ? 'var(--accent)' 
-                      : !isScrolled && isOverHero && !isDark 
-                        ? 'white' 
-                        : 'var(--color-foreground)'
-                  }}
-                />
+                <span className="relative inline-flex">
+                  <ShoppingBagIcon
+                    className="h-5 w-5"
+                    style={{
+                      color: pathname === "/cart"
+                        ? 'var(--accent)'
+                        : !isScrolled && isOverHero && !isDark
+                          ? 'white'
+                          : 'var(--color-foreground)'
+                    }}
+                  />
+                  {count > 0 ? (
+                    <span
+                      className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-semibold flex items-center justify-center"
+                      style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}
+                    >
+                      {count}
+                    </span>
+                  ) : null}
+                </span>
               </Link>
             </Button>
             <Sheet>
@@ -148,13 +152,7 @@ export function Nav() {
               <div className="flex flex-col h-full">
                 {/* Mobile Logo */}
                 <div className="flex items-center justify-center py-6 border-b" style={{ borderColor: 'var(--color-border)' }}>
-                  <Image
-                    src={isDark ? "/assets/topnotch-logo-light.png" : "/assets/topnotch-logo-dark.png"}
-                    alt="Topnotch Electronics logo"
-                    height={80}
-                    width={300}
-                    className="h-16 w-auto"
-                  />
+                  <BrandLogo markClassName="h-14 w-auto" />
                 </div>
                 
                 {/* Mobile Navigation */}
@@ -212,16 +210,26 @@ export function Nav() {
             </Button>
             <Button asChild variant="ghost" size="icon" className={`h-9 w-9 ${!isScrolled && isOverHero && !isDark ? "text-white" : ""}`} aria-label="Cart">
               <Link href="/cart">
-                <ShoppingBagIcon 
-                  className="h-5 w-5"
-                  style={{ 
-                    color: pathname === "/cart" 
-                      ? 'var(--accent)' 
-                      : !isScrolled && isOverHero && !isDark 
-                        ? 'white' 
-                        : 'var(--color-foreground)'
-                  }}
-                />
+                <span className="relative inline-flex">
+                  <ShoppingBagIcon
+                    className="h-5 w-5"
+                    style={{
+                      color: pathname === "/cart"
+                        ? 'var(--accent)'
+                        : !isScrolled && isOverHero && !isDark
+                          ? 'white'
+                          : 'var(--color-foreground)'
+                    }}
+                  />
+                  {count > 0 ? (
+                    <span
+                      className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-semibold flex items-center justify-center"
+                      style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}
+                    >
+                      {count}
+                    </span>
+                  ) : null}
+                </span>
               </Link>
             </Button>
             <Link href="/dashboard" aria-label="Account" className="ml-1">
@@ -253,29 +261,40 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
   );
 }
 
+export function BrandLogo({
+  showWordmark = true,
+  className = "",
+  markClassName = "h-10 w-auto",
+  wordmarkClassName = "text-lg md:text-xl font-semibold tracking-tight",
+}: {
+  showWordmark?: boolean;
+  className?: string;
+  markClassName?: string;
+  wordmarkClassName?: string;
+}) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
+      <Image
+        src="/assets/hoe-logo-mark.png"
+        alt="House of Electronics logo"
+        width={356}
+        height={394}
+        className={markClassName}
+        priority
+      />
+      {showWordmark ? (
+        <span className={`${wordmarkClassName} text-[--color-foreground] leading-none`}>
+          House of Electronics
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
 // Exact FooterLogo extracted from homepage
 export function FooterLogo() {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('theme-dark'));
-    };
-    checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <Image
-      key={isDark ? "dark" : "light"}
-      src={isDark ? "/assets/topnotch-logo-light.png" : "/assets/topnotch-logo-dark.png"}
-      alt="TopNotch Electronics"
-      width={120}
-      height={120}
-      className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto"
-    />
+    <BrandLogo showWordmark={false} markClassName="h-16 sm:h-20 md:h-24 w-auto" />
   );
 }
 
@@ -320,8 +339,8 @@ export function Footer() {
             <h3 className="font-semibold text-lg">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link href="/shop" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Shop All</Link></li>
-              <li><Link href="/categories/laptops" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Laptops</Link></li>
-              <li><Link href="/categories/phones" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Phones</Link></li>
+              <li><Link href="/categories/mac" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Mac</Link></li>
+              <li><Link href="/categories/iphone" className="text-muted-foreground hover:text-foreground transition-colors text-sm">iPhone</Link></li>
               <li><Link href="/categories/accessories" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Accessories</Link></li>
               <li><Link href="/repairs" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Repairs</Link></li>
             </ul>
@@ -356,7 +375,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border/50">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} TopNotch Electronics. All rights reserved.
+              © {new Date().getFullYear()} Type A House of Electronics (SL) Ltd. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">

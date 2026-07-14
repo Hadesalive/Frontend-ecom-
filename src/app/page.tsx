@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { Nav } from "./(ui)/components";
+import { Nav, BrandLogo } from "./(ui)/components";
+import { formatPrice as formatNle } from "@/lib/currency";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
@@ -54,7 +55,7 @@ function Hero() {
       <div className="container-max min-h-[75svh] sm:min-h-[92svh] md:min-h-[110svh] lg:min-h-[120svh] pt-14 md:pt-10 pb-12 md:pb-20 flex items-center">
         <div className="max-w-4xl mx-auto text-center rounded-2xl px-4 sm:px-0">
           <h1 className="text-balance mx-auto max-w-3xl text-2xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.15] md:leading-[1.05] font-bold tracking-tight mb-2">
-            Premium devices. TopNotch service.
+            Where technology comes home.
         </h1>
           <p className="text-balance text-[14px] sm:text-lg text-[--color-muted-foreground] mb-5 mx-auto max-w-sm md:max-w-xl">
             Curated Macs, iPads, iPhones, and accessories with expert support and repairs.
@@ -84,7 +85,7 @@ function Hero() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-3 text-[11px] sm:text-xs text-[--color-muted-foreground] mt-2">
                 <span className="inline-flex items-center justify-center gap-2">
                   <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
-                  Free delivery $100+
+                  Free delivery {formatNle(100)}+
                 </span>
                 <span className="inline-flex items-center justify-center gap-2">
                   <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
@@ -173,10 +174,9 @@ type ProductItem = { title: string; image: string; price?: string; href?: string
 
 function formatPrice(input?: string) {
   if (!input) return undefined;
-  if (/^\$/.test(input)) return input;
-  const asNum = Number(input);
-  if (Number.isFinite(asNum)) return asNum.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-  return input;
+  const asNum = Number(String(input).replace(/[^0-9.]/g, ""));
+  if (!Number.isFinite(asNum)) return input;
+  return formatNle(asNum);
 }
 
 function Product({ title, image, price, href = "/shop" , badge }: ProductItem & { index?: number }) {
@@ -236,30 +236,8 @@ function Product({ title, image, price, href = "/shop" , badge }: ProductItem & 
 }
 
 function FooterLogo() {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      setIsDark(document.documentElement.classList.contains('theme-dark'));
-    };
-    
-    checkTheme();
-    
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <Image
-      key={isDark ? "dark" : "light"}
-      src={isDark ? "/assets/topnotch-logo-light.png" : "/assets/topnotch-logo-dark.png"}
-      alt="TopNotch Electronics"
-      width={120}
-      height={120}
-      className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto"
-    />
+    <BrandLogo showWordmark={false} markClassName="h-16 sm:h-20 md:h-24 w-auto" />
   );
 }
 
@@ -337,7 +315,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-1">Mac Studio Collection</h3>
                   <p className="text-white/90 text-sm mb-3">Mac Studio, Studio Display, Magic accessories</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-white">$4,999</span>
+                    <span className="text-2xl font-bold text-white">{formatNle(4999)}</span>
                     <Button size="sm" className="bg-white text-black hover:bg-white/90">
                       View Collection
                     </Button>
@@ -360,7 +338,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-1">iPhone Ecosystem</h3>
                   <p className="text-white/90 text-sm mb-3">iPhone 15 Pro, AirPods Pro, Apple Watch, MagSafe</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-white">$2,199</span>
+                    <span className="text-2xl font-bold text-white">{formatNle(2199)}</span>
                     <Button size="sm" className="bg-white text-black hover:bg-white/90">
                       View Collection
                     </Button>
@@ -383,7 +361,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-1">Creative Pro Kit</h3>
                   <p className="text-white/90 text-sm mb-3">iPad Pro, Apple Pencil, Magic Keyboard, Pro Display</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-white">$3,299</span>
+                    <span className="text-2xl font-bold text-white">{formatNle(3299)}</span>
                     <Button size="sm" className="bg-white text-black hover:bg-white/90">
                       View Collection
                     </Button>
@@ -436,8 +414,8 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-1">MacBook Air M3</h3>
                 <p className="text-sm text-[--color-muted-foreground] mb-4">Lightning fast performance in a sleek design</p>
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-2xl font-bold text-[--accent]">$899</span>
-                  <span className="text-sm text-[--color-muted-foreground] line-through">$1,099</span>
+                  <span className="text-2xl font-bold text-[--accent]">{formatNle(899)}</span>
+                  <span className="text-sm text-[--color-muted-foreground] line-through">{formatNle(1099)}</span>
                 </div>
                 <Button className="w-full" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}>
                   Shop Now
@@ -464,8 +442,8 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-1">iPhone + AirPods Bundle</h3>
                 <p className="text-sm text-[--color-muted-foreground] mb-4">Complete mobile experience</p>
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-2xl font-bold text-[--accent]">$1,199</span>
-                  <span className="text-sm text-[--color-muted-foreground] line-through">$1,398</span>
+                  <span className="text-2xl font-bold text-[--accent]">{formatNle(1199)}</span>
+                  <span className="text-sm text-[--color-muted-foreground] line-through">{formatNle(1398)}</span>
                 </div>
                 <Button variant="outline" className="w-full border-[--accent] text-[--accent] hover:bg-[--accent] hover:text-white">
                   View Bundle
@@ -492,7 +470,7 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-1">Trade-In Program</h3>
                 <p className="text-sm text-[--color-muted-foreground] mb-4">Get credit for your old device</p>
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-2xl font-bold text-[--accent]">Up to $800</span>
+                  <span className="text-2xl font-bold text-[--accent]">Up to {formatNle(800)}</span>
                   <span className="text-sm text-[--color-muted-foreground]">credit</span>
                 </div>
                 <Button variant="outline" className="w-full border-[--accent] text-[--accent] hover:bg-[--accent] hover:text-white">
@@ -505,7 +483,7 @@ export default function Home() {
           {/* Additional Promo Banner */}
           <div className="mt-12 relative overflow-hidden rounded-2xl border-2 border-[--accent] bg-gradient-to-r from-[--accent]/20 to-[--accent]/10 p-8 text-center">
             <div className="relative z-10">
-              <h3 className="text-2xl md:text-3xl font-bold text-[--accent] mb-2">Free Delivery on Orders Over $100</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-[--accent] mb-2">Free Delivery on Orders Over {formatNle(100)}</h3>
               <p className="text-[--color-muted-foreground] mb-6">Plus free returns and 12-month warranty on all products</p>
               <Button size="lg" style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }} className="hover:opacity-90">
                 Shop All Products
@@ -567,7 +545,7 @@ export default function Home() {
                 ))}
               </div>
               <blockquote className="text-[--color-foreground] mb-4">
-                &quot;TopNotch Electronics has the best selection of Apple products. Great prices and fast shipping!&quot;
+                &quot;House of Electronics has the best selection of Apple products. Great prices and fast shipping!&quot;
               </blockquote>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[--accent] flex items-center justify-center text-white font-semibold">
@@ -684,8 +662,8 @@ export default function Home() {
               <h3 className="font-semibold text-lg">Quick Links</h3>
               <ul className="space-y-2">
                 <li><Link href="/shop" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Shop All</Link></li>
-                <li><Link href="/categories/laptops" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Laptops</Link></li>
-                <li><Link href="/categories/phones" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Phones</Link></li>
+                <li><Link href="/categories/mac" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Mac</Link></li>
+                <li><Link href="/categories/iphone" className="text-muted-foreground hover:text-foreground transition-colors text-sm">iPhone</Link></li>
                 <li><Link href="/categories/accessories" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Accessories</Link></li>
                 <li><Link href="/repairs" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Repairs</Link></li>
               </ul>
@@ -720,7 +698,7 @@ export default function Home() {
           <div className="mt-12 pt-8 border-t border-border/50">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-muted-foreground text-sm">
-                © {new Date().getFullYear()} TopNotch Electronics. All rights reserved.
+                © {new Date().getFullYear()} Type A House of Electronics (SL) Ltd. All rights reserved.
               </p>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
