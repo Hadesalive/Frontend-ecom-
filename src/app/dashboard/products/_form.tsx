@@ -1,4 +1,5 @@
 import { ProductRow } from "@/lib/data";
+import { ImageField } from "./_image-field";
 
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
@@ -58,11 +59,8 @@ export function ProductForm({
         </Field>
       </div>
 
-      <Field label="Primary image path" hint="e.g. /assets/photo-....avif">
-        <input name="image" required defaultValue={product?.image ?? ""} className={inputCls} />
-      </Field>
-      <Field label="Gallery images" hint="One path per line (primary first)">
-        <textarea name="images" rows={3} defaultValue={(product?.images ?? []).join("\n")} className={areaCls} />
+      <Field label="Images" hint="Upload image files or paste paths/URLs. The first image is the primary.">
+        <ImageField defaultImages={product?.images ?? []} />
       </Field>
       <Field label="Description">
         <textarea name="description" rows={3} defaultValue={product?.description ?? ""} className={areaCls} />
