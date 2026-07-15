@@ -31,72 +31,82 @@ function Hero() {
     };
   }, []);
   return (
-    <section id="hero" className="relative overflow-hidden min-h-[75svh] sm:min-h-[92svh] md:min-h-[110svh] lg:min-h-[120svh]">
+    <section id="hero" className="relative overflow-hidden min-h-[88svh]">
       <div className="absolute inset-0 -z-10">
-        <div style={{ transform: `translateY(${parallax}px)` }} className="will-change-transform h-full w-full">
+        <div style={{ transform: `translateY(${parallax}px)` }} className="will-change-transform h-full w-full scale-105">
           <Image
-            src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1920&auto=format&fit=crop"
-            alt="Tech workspace with devices"
+            src="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1920&auto=format&fit=crop"
+            alt="Premium consumer electronics"
             fill
             className="object-cover"
             sizes="100vw"
             placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgZmlsbD0nI2U2ZTZlNicvPjxyZWN0IHdpZHRoPSczMjAnIGhlaWdodD0nMTgwJyBmaWxsPSIjZmZmZmZmIiBmaWxsLW9wYWNpdHk9JzAuMycvPjwvc3ZnPiA="
-            style={{ objectPosition: "50% 20%" }}
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgZmlsbD0nIzBmMTcyYScvPjwvc3ZnPiA="
+            style={{ objectPosition: "50% 38%" }}
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background/95" />
-        <div className="absolute inset-0" style={{
-          background:
-            "radial-gradient(1200px 400px at 50% 10%, rgba(0,0,0,0.25), transparent 60%)"
-        }} />
+        {/* Legibility wash — darkest at the lower-left where the copy sits */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/90 via-black/60 to-black/25" />
+        {/* Brand identity tint (blue → teal) */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(120deg, rgba(47,111,181,0.42), rgba(112,166,143,0.22) 55%, transparent 80%)" }}
+        />
+        {/* Seamless blend into the page below */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
-      <div className="container-max min-h-[75svh] sm:min-h-[92svh] md:min-h-[110svh] lg:min-h-[120svh] pt-14 md:pt-10 pb-12 md:pb-20 flex items-center">
-        <div className="max-w-4xl mx-auto text-center rounded-2xl px-4 sm:px-0">
-          <h1 className="text-balance mx-auto max-w-3xl text-2xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.15] md:leading-[1.05] font-bold tracking-tight mb-2">
+
+      <div className="container-max relative min-h-[88svh] flex items-end md:items-center pt-28 pb-16 md:py-24">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] text-white/85 mb-5">
+            <span className="h-1.5 w-5 rounded-full brand-gradient" />
+            Sierra Leone · Electronics &amp; Repairs
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.03] text-white">
             Where technology comes home.
-        </h1>
-          <p className="text-balance text-[14px] sm:text-lg text-[--color-muted-foreground] mb-5 mx-auto max-w-sm md:max-w-xl">
-            Curated Macs, iPads, iPhones, and accessories with expert support and repairs.
+          </h1>
+
+          <p className="mt-5 max-w-lg text-[15px] sm:text-lg text-white/80 leading-relaxed">
+            Premium phones, laptops, and audio — plus expert repairs — delivered across Freetown and beyond.
           </p>
-          <div className="w-full sm:w-auto mx-auto px-4 sm:px-0">
-            <div className="flex flex-col items-center gap-2">
-              <Button
-                asChild
-                className="group px-7 md:px-10 h-11 md:h-12 text-[15px] md:text-base rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.14)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.18)] transition-shadow"
-                style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}
-              >
-                <Link href="/shop" aria-label="Shop the collection">
-                  <span className="inline-flex items-center gap-2">
-                    Shop the collection
-                    <ChevronRightIcon className="h-5 w-5 translate-x-0 group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </Link>
-              </Button>
-              <Link
-                href="#grid"
-                aria-label="Explore categories"
-                className="inline-flex items-center gap-2 text-sm md:text-base text-[--color-foreground]/80 hover:text-[--color-foreground] transition-colors"
-              >
-                Explore categories
-                <ChevronRightIcon className="h-4 w-4" />
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button
+              asChild
+              className="group h-12 px-7 rounded-full text-base shadow-[0_10px_30px_rgba(0,0,0,0.28)]"
+              style={{ background: 'var(--accent)', color: 'var(--accent-contrast)' }}
+            >
+              <Link href="/shop" aria-label="Shop the collection">
+                <span className="inline-flex items-center gap-2">
+                  Shop the collection
+                  <ChevronRightIcon className="h-5 w-5 group-hover:translate-x-0.5 transition-transform" />
+                </span>
               </Link>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-3 text-[11px] sm:text-xs text-[--color-muted-foreground] mt-2">
-                <span className="inline-flex items-center justify-center gap-2">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
-                  Free delivery {formatNle(100)}+
-                </span>
-                <span className="inline-flex items-center justify-center gap-2">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
-                  12‑month warranty
-                </span>
-                <span className="inline-flex items-center justify-center gap-2">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
-                  Secure checkout
-                </span>
-              </div>
-            </div>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="h-12 px-7 rounded-full text-base border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur"
+            >
+              <Link href="/repairs" aria-label="Book a repair">Book a repair</Link>
+            </Button>
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] sm:text-sm text-white/75">
+            <span className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+              Free delivery {formatNle(100)}+
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+              12‑month warranty
+            </span>
+            <span className="inline-flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--accent)' }} />
+              Secure checkout
+            </span>
           </div>
         </div>
       </div>
