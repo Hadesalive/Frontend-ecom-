@@ -6,7 +6,14 @@ const SESSION_COOKIE = "hoe_admin_session";
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
 function sessionSecret(): string {
-  return process.env.SESSION_SECRET || "dev-insecure-session-secret-change-me";
+  const secret = process.env.SESSION_SECRET;
+  if (secret) return secret;
+  // Never fall back to a known default in production — that would let anyone
+  // forge an admin session. Fail loudly instead so misconfiguration is caught.
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("SESSION_SECRET is not set. Refusing to run with an insecure default in production.");
+  }
+  return "dev-insecure-session-secret-change-me";
 }
 
 // ---- Password hashing (scrypt) ----
