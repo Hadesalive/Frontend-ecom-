@@ -49,7 +49,7 @@ export function DashboardSidebar({
     <aside className={wrapperClasses} style={{ borderColor: drawer ? undefined : "var(--color-border)" }}>
       <div className="h-14 flex items-center mb-3 px-1 overflow-hidden">
         <Link href="/dashboard" aria-label="House of Electronics" className="flex items-center min-w-0">
-          <BrandLogo markClassName="h-8 w-auto shrink-0" wordmarkClassName="text-sm font-semibold tracking-tight truncate" />
+          <BrandLogo markClassName="h-8 w-auto shrink-0" wordmarkClassName="text-sm font-semibold tracking-tight truncate text-[--color-foreground]" />
         </Link>
       </div>
       <nav className="space-y-0.5 mt-2">

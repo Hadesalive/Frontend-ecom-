@@ -33,28 +33,28 @@ function Hero() {
   return (
     <section id="hero" className="relative overflow-hidden min-h-[88svh]">
       <div className="absolute inset-0 -z-10">
+        {/* Dark base so the hero is dark even while the photo loads */}
+        <div className="absolute inset-0 bg-[#0a0f16]" />
         <div style={{ transform: `translateY(${parallax}px)` }} className="will-change-transform h-full w-full scale-105">
           <Image
-            src="https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=1920&auto=format&fit=crop"
-            alt="Premium consumer electronics"
+            src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=1920&auto=format&fit=crop"
+            alt="Assorted premium electronics on a dark background"
             fill
             className="object-cover"
             sizes="100vw"
             placeholder="blur"
-            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgZmlsbD0nIzBmMTcyYScvPjwvc3ZnPiA="
-            style={{ objectPosition: "50% 38%" }}
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cmVjdCB3aWR0aD0nMzIwJyBoZWlnaHQ9JzE4MCcgZmlsbD0nIzBhMGYxNicvPjwvc3ZnPiA="
+            style={{ objectPosition: "50% 50%" }}
             priority
           />
         </div>
         {/* Legibility wash — darkest at the lower-left where the copy sits */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-black/90 via-black/60 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/40 to-black/10" />
         {/* Brand identity tint (blue → teal) */}
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(120deg, rgba(47,111,181,0.42), rgba(112,166,143,0.22) 55%, transparent 80%)" }}
+          style={{ background: "linear-gradient(120deg, rgba(47,111,181,0.35), rgba(112,166,143,0.18) 55%, transparent 80%)" }}
         />
-        {/* Seamless blend into the page below */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
       </div>
 
       <div className="container-max relative min-h-[88svh] flex items-end md:items-center pt-28 pb-16 md:py-24">

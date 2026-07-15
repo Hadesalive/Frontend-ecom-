@@ -68,7 +68,12 @@ export function Nav() {
       }`}>
         <div className="container-max h-20 flex items-center justify-between">
           <Link href="/" aria-label="House of Electronics" className="flex items-center">
-            <BrandLogo markClassName="h-12 md:h-14 w-auto" />
+            <BrandLogo
+              markClassName="h-12 md:h-14 w-auto"
+              wordmarkClassName={`text-lg md:text-xl font-semibold tracking-tight ${
+                !isScrolled && isOverHero && !isDark ? "text-white" : "text-[--color-foreground]"
+              }`}
+            />
           </Link>
           <nav className="hidden md:flex items-center gap-4 text-[15px]">
             {items.map((it) => {
@@ -265,7 +270,7 @@ export function BrandLogo({
   showWordmark = true,
   className = "",
   markClassName = "h-10 w-auto",
-  wordmarkClassName = "text-lg md:text-xl font-semibold tracking-tight",
+  wordmarkClassName = "text-lg md:text-xl font-semibold tracking-tight text-[--color-foreground]",
 }: {
   showWordmark?: boolean;
   className?: string;
@@ -283,7 +288,7 @@ export function BrandLogo({
         priority
       />
       {showWordmark ? (
-        <span className={`${wordmarkClassName} text-[--color-foreground] leading-none`}>
+        <span className={`${wordmarkClassName} leading-none`}>
           House of Electronics
         </span>
       ) : null}
