@@ -288,8 +288,13 @@ export function BrandLogo({
         priority
       />
       {showWordmark ? (
-        <span className={`${wordmarkClassName} leading-none`}>
-          House of Electronics
+        <span className={`flex flex-col justify-center leading-none ${wordmarkClassName}`}>
+          <span className="font-mono text-[0.52em] font-medium uppercase tracking-[0.34em] opacity-60">
+            House of
+          </span>
+          <span className="text-[1.02em] font-black uppercase tracking-tight mt-[0.16em]">
+            Electronics
+          </span>
         </span>
       ) : null}
     </span>
