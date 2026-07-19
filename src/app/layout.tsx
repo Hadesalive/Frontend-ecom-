@@ -16,7 +16,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "House of Electronics",
-  description: "Where technology comes home. Premium electronics and expert repairs in Sierra Leone.",
+  description: "Where technology comes home. Genuine electronics at honest prices, delivered across Sierra Leone.",
 };
 
 export default function RootLayout({

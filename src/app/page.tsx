@@ -49,7 +49,7 @@ function Hero({ featured }: { featured: Product }) {
               data-hero="sub"
               className="mt-6 max-w-md text-[15px] md:text-base text-[--color-muted-foreground] leading-relaxed"
             >
-              Genuine devices, honest prices, and expert repairs — delivered across Sierra Leone.
+              Genuine devices at honest prices — in store in Freetown and delivered across Sierra Leone.
             </p>
             <div data-hero="cta" className="mt-8 flex flex-wrap items-stretch gap-3">
               <Link
@@ -59,13 +59,13 @@ function Hero({ featured }: { featured: Product }) {
               >
                 Shop now <ArrowRightIcon className="h-4 w-4" />
               </Link>
-              <Link
-                href="/repairs"
+              <a
+                href="#store"
                 className="inline-flex items-center gap-3 h-12 px-6 font-mono text-[13px] uppercase tracking-[0.18em] border text-[--color-foreground] transition-colors hover:border-[--color-foreground]"
                 style={{ borderColor: "var(--color-border)" }}
               >
-                Book a repair
-              </Link>
+                Visit the store
+              </a>
             </div>
           </div>
 
@@ -79,13 +79,19 @@ function Hero({ featured }: { featured: Product }) {
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-[--color-muted]">
                 <Image
-                  src={featured.image}
-                  alt={featured.name}
+                  src="/assets/store/counter-macbook.jpg"
+                  alt={`${featured.name} on display in our Freetown store`}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                   sizes="(min-width: 1024px) 42vw, 100vw"
                   priority
                 />
+                <span
+                  className="absolute left-3 bottom-3 border bg-[--color-card]/90 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-[--color-muted-foreground] backdrop-blur"
+                  style={{ borderColor: "var(--color-border)" }}
+                >
+                  Shot in our Freetown store
+                </span>
               </div>
               <div
                 className="flex items-center justify-between gap-4 border-t px-4 py-3.5 bg-[--color-card]"
@@ -115,10 +121,10 @@ function Hero({ featured }: { featured: Product }) {
             12-month warranty
           </span>
           <span className="py-3.5 px-4 border-l" style={{ borderColor: "var(--color-border)" }}>
-            Genuine parts
+            100% genuine stock
           </span>
           <span className="py-3.5 px-4 border-l hidden md:block" style={{ borderColor: "var(--color-border)" }}>
-            Repairs in-house
+            Free store pickup
           </span>
         </div>
       </div>
@@ -244,7 +250,7 @@ function ProductCard({ product }: { product: Product }) {
 function NewArrivals() {
   const items = products.slice(0, 8);
   return (
-    <section className="container-max pb-16 md:pb-24">
+    <section className="container-max py-16 md:py-24">
       <SectionHead eyebrow="Catalog" title="New arrivals" href="/shop" linkLabel="View all" />
       <div
         className="gsap-reveal mt-8 grid grid-cols-2 lg:grid-cols-4 border-t border-l"
@@ -258,51 +264,119 @@ function NewArrivals() {
   );
 }
 
-/* --------------------------------- Repairs --------------------------------- */
+/* -------------------------------- The store -------------------------------- */
 
-const SERVICES: [string, string][] = [
-  ["Diagnostics", "Free"],
-  ["Battery replacement", `From ${formatPrice(49)}`],
-  ["Screen repair", `From ${formatPrice(79)}`],
-  ["Data recovery", `From ${formatPrice(99)}`],
-  ["Cleaning & thermal service", `From ${formatPrice(39)}`],
-];
+const STORE_SHOTS = {
+  floor: {
+    src: "/assets/store/store-floor.jpg",
+    alt: "The House of Electronics shop floor in Freetown",
+    caption: "The shop floor — Freetown",
+  },
+  staff: {
+    src: "/assets/store/staff-tablet.jpg",
+    alt: "A House of Electronics team member with a Galaxy Tab",
+    caption: "Real people, real service",
+  },
+  display: {
+    src: "/assets/store/store-display.jpg",
+    alt: "Laptops on display in the store",
+    caption: "Stocked & tested",
+  },
+};
 
-function RepairsBand() {
+function StoreSection() {
   return (
-    <section className="border-t bg-[--color-muted]" style={{ borderColor: "var(--color-border)" }}>
-      <div className="container-max grid gap-12 py-16 md:py-24 lg:grid-cols-2 lg:gap-16">
-        <div className="gsap-reveal">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[--color-muted-foreground]">Service</p>
-          <h2 className="mt-3 text-4xl md:text-5xl uppercase tracking-tight leading-[1.02]">
-            <span className="block font-black">Repairs,</span>
-            <span className="block font-medium text-[--color-muted-foreground]">done properly.</span>
-          </h2>
-          <p className="mt-5 max-w-md text-[15px] text-[--color-muted-foreground] leading-relaxed">
-            Certified technicians, genuine parts, and a free diagnostic before any work begins.
-          </p>
-          <Link
-            href="/repairs"
-            className="mt-8 inline-flex items-center gap-3 h-12 px-6 font-mono text-[13px] uppercase tracking-[0.18em] transition-opacity hover:opacity-90"
-            style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}
+    <section id="store" className="scroll-mt-24 border-y bg-[--color-muted]" style={{ borderColor: "var(--color-border)" }}>
+      <div className="container-max py-16 md:py-24">
+        <SectionHead eyebrow="The store" title="Real store. Real stock." />
+        <div className="mt-8 grid gap-4 md:grid-cols-3 md:grid-rows-2">
+          <figure
+            className="gsap-reveal relative min-h-[260px] overflow-hidden border md:col-span-2 md:row-span-2 md:min-h-[480px]"
+            style={{ borderColor: "var(--color-border)" }}
           >
-            Book a repair <ArrowRightIcon className="h-4 w-4" />
-          </Link>
-        </div>
-        <ul className="gsap-reveal self-center divide-y border-y" style={{ borderColor: "var(--color-border)" }}>
-          {SERVICES.map(([name, price]) => (
-            <li
-              key={name}
-              className="flex items-center justify-between gap-4 py-4"
+            <Image src={STORE_SHOTS.floor.src} alt={STORE_SHOTS.floor.alt} fill className="object-cover" sizes="(min-width: 768px) 62vw, 100vw" />
+            <figcaption
+              className="absolute inset-x-0 bottom-0 border-t bg-[--color-card]/90 px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[--color-muted-foreground] backdrop-blur"
               style={{ borderColor: "var(--color-border)" }}
             >
-              <span className="font-semibold">{name}</span>
-              <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-[--color-muted-foreground]">
-                {price}
-              </span>
-            </li>
+              {STORE_SHOTS.floor.caption}
+            </figcaption>
+          </figure>
+          {[STORE_SHOTS.staff, STORE_SHOTS.display].map((shot) => (
+            <figure
+              key={shot.src}
+              className="gsap-reveal relative aspect-[4/3] overflow-hidden border md:aspect-auto md:min-h-[232px]"
+              style={{ borderColor: "var(--color-border)" }}
+            >
+              <Image src={shot.src} alt={shot.alt} fill className="object-cover object-[50%_25%]" sizes="(min-width: 768px) 31vw, 100vw" />
+              <figcaption
+                className="absolute inset-x-0 bottom-0 border-t bg-[--color-card]/90 px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[--color-muted-foreground] backdrop-blur"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                {shot.caption}
+              </figcaption>
+            </figure>
           ))}
-        </ul>
+        </div>
+        <div className="gsap-reveal mt-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <h3 className="text-2xl md:text-3xl uppercase tracking-tight">
+              <span className="font-black">A real store,</span>{" "}
+              <span className="font-medium text-[--color-muted-foreground]">not just a website.</span>
+            </h3>
+            <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-[--color-muted-foreground]">
+              Walk in, try the products, and leave with them the same day — or order online and have them delivered to your door.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="inline-flex h-12 items-center gap-3 border px-6 font-mono text-[13px] uppercase tracking-[0.18em] text-[--color-foreground] transition-colors hover:border-[--color-foreground]"
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            Contact us <ArrowRightIcon className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------- Audio spotlight ----------------------------- */
+
+function AudioSpotlight() {
+  return (
+    <section className="container-max pb-16 md:pb-24">
+      <div className="grid border md:grid-cols-2" style={{ borderColor: "var(--color-border)" }}>
+        <div className="gsap-reveal flex flex-col justify-center p-8 md:p-12">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[--color-muted-foreground]">Category spotlight</p>
+          <h2 className="mt-3 text-4xl uppercase leading-[1.02] tracking-tight md:text-5xl">
+            <span className="block font-black">Sound that</span>
+            <span className="block font-medium text-[--color-muted-foreground]">carries.</span>
+          </h2>
+          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-[--color-muted-foreground]">
+            From earbuds to PartyBox — audio that turns a room into an occasion.
+          </p>
+          <Link
+            href="/categories/audio"
+            className="mt-8 inline-flex h-12 w-fit items-center gap-3 px-6 font-mono text-[13px] uppercase tracking-[0.18em] transition-opacity hover:opacity-90"
+            style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}
+          >
+            Shop audio <ArrowRightIcon className="h-4 w-4" />
+          </Link>
+        </div>
+        <div
+          className="relative aspect-[4/5] border-t md:aspect-auto md:min-h-[460px] md:border-l md:border-t-0"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          <Image
+            src="/assets/store/staff-jbl.jpg"
+            alt="JBL PartyBox speaker in the House of Electronics store"
+            fill
+            className="object-cover object-[50%_30%]"
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+          <span className="shelf-tag absolute bottom-4 left-4">JBL PartyBox — in stock</span>
+        </div>
       </div>
     </section>
   );
@@ -345,8 +419,9 @@ export default function Home() {
       <main>
         <Hero featured={products[0]} />
         <Categories />
+        <StoreSection />
         <NewArrivals />
-        <RepairsBand />
+        <AudioSpotlight />
       </main>
       <Footer />
     </div>

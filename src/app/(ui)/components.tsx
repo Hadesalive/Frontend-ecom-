@@ -352,7 +352,7 @@ export function Footer() {
               <li><Link href="/categories/mac" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Mac</Link></li>
               <li><Link href="/categories/iphone" className="text-muted-foreground hover:text-foreground transition-colors text-sm">iPhone</Link></li>
               <li><Link href="/categories/accessories" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Accessories</Link></li>
-              <li><Link href="/repairs" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Repairs</Link></li>
+              <li><Link href="/categories/audio" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Audio</Link></li>
             </ul>
           </div>
 
